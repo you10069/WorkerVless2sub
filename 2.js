@@ -36,10 +36,9 @@ let MamaJustKilledAMan = ['twitter', 'miaoko'];
 let proxyIPPool = [];
 let socks5Data;
 let alpn = '';
-let 网络备案 = `萌ICP备-20240707号`;//写你自己的维护者广告
 let 额外ID = '0';
 let 加密方式 = 'auto';
-let 网站图标, 网站头像, 网站背景, xhttp = '';
+let xhttp = '';
 async function 整理优选列表(api) {
 	if (!api || api.length === 0) return [];
 
@@ -384,7 +383,6 @@ function utf8ToBase64(str) {
 }
 
 async function subHtml(request) {
-	const url = new URL(request.url);
 	const HTML = `
 			<!DOCTYPE html>
 			<html>
@@ -392,7 +390,6 @@ async function subHtml(request) {
 				<meta charset="UTF-8">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 				<title>${FileName}</title>
-				${网站图标}
 				<style>
 					:root {
 						--primary-color: #4361ee;
@@ -408,10 +405,6 @@ async function subHtml(request) {
 					}
 					
 					body {
-						${网站背景}
-						background-size: cover;
-						background-position: center;
-						background-attachment: fixed;
 						background-color: var(--bg-color);
 						font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 						line-height: 1.6;
@@ -506,95 +499,6 @@ async function subHtml(request) {
 						word-break: break-all;
 					}
 
-					.github-corner svg {
-						fill: var(--primary-color);
-						color: var(--card-bg);
-						position: absolute;
-						top: 0;
-						right: 0;
-						border: 0;
-						width: 80px;
-						height: 80px;
-					}
-
-					.github-corner:hover .octo-arm {
-						animation: octocat-wave 560ms ease-in-out;
-					}
-
-					@keyframes octocat-wave {
-						0%, 100% { transform: rotate(0) }
-						20%, 60% { transform: rotate(-25deg) }
-						40%, 80% { transform: rotate(10deg) }
-					}
-
-					@keyframes rotate {
-						from { transform: rotate(0deg); }
-						to { transform: rotate(360deg); }
-					}
-
-					.logo-title {
-						position: relative;
-						display: flex;
-						justify-content: center;
-						align-items: center;
-						margin-bottom: 2rem;
-					}
-
-					.logo-wrapper {
-						position: absolute;
-						left: 0;
-						width: 50px;
-						height: 50px;
-					}
-
-					.logo-title img {
-						width: 100%;
-						height: 100%;
-						border-radius: 50%;
-						position: relative;
-						z-index: 1;
-						background: var(--card-bg);
-						box-shadow: 0 0 15px rgba(67, 97, 238, 0.1);
-					}
-
-					.logo-border {
-						position: absolute;
-						top: -3px;
-						left: -3px;
-						right: -3px;
-						bottom: -3px;
-						border-radius: 50%;
-						animation: rotate 3s linear infinite;
-						background: conic-gradient(
-							from 0deg,
-							transparent 0%,
-							var(--primary-color) 20%,
-							rgba(67, 97, 238, 0.8) 40%,
-							transparent 60%,
-							transparent 100%
-						);
-						box-shadow: 0 0 10px rgba(67, 97, 238, 0.3);
-						filter: blur(0.5px);
-					}
-
-					.logo-border::after {
-						content: '';
-						position: absolute;
-						inset: 3px;
-						border-radius: 50%;
-						background: var(--card-bg);
-					}
-
-					@keyframes rotate {
-						from { transform: rotate(0deg); }
-						to { transform: rotate(360deg); }
-					}
-
-					.logo-title h1 {
-						margin-bottom: 0;
-						text-align: center;
-					}
-
 					@media (max-width: 480px) {
 						.container {
 							padding: 1.5rem;
@@ -603,41 +507,6 @@ async function subHtml(request) {
 						h1 {
 							font-size: 1.5rem;
 						}
-
-						.github-corner:hover .octo-arm {
-							animation: none;
-						}
-						.github-corner .octo-arm {
-							animation: octocat-wave 560ms ease-in-out;
-						}
-
-						.logo-wrapper {
-							width: 40px;
-							height: 40px;
-						}
-					}
-
-					.beian-info {
-						text-align: center;
-						font-size: 13px;
-					}
-
-					.beian-info a {
-						color: var(--primary-color);
-						text-decoration: none;
-						border-bottom: 1px dashed var(--primary-color);
-						padding-bottom: 2px;
-					}
-
-					.beian-info a:hover {
-						border-bottom-style: solid;
-					}
-
-					#qrcode {
-						display: flex;
-						justify-content: center;
-						align-items: center;
-						margin-top: 20px;
 					}
 
 					.info-icon {
@@ -684,21 +553,10 @@ async function subHtml(request) {
 						display: none;
 					}
 				</style>
-				<script src="https://cdn.jsdelivr.net/npm/@keeex/qrcodejs-kx@1.0.2/qrcode.min.js"></script>
 			</head>
 			<body>
-				<a href="https://github.com/cmliu/WorkerVless2sub" target="_blank" class="github-corner" aria-label="View source on Github">
-					<svg viewBox="0 0 250 250" aria-hidden="true">
-						<path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
-						<path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
-						<path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
-					</svg>
-				</a>
 				<div class="container">
-						<div class="logo-title">
-							${网站头像}
-							<h1>${FileName}</h1>
-						</div>
+					<h1>${FileName}</h1>
 					<div class="input-group">
 						<label for="link">节点链接</label>
 						<input type="text" id="link" placeholder="请输入 VMess / VLESS / Trojan 链接">
@@ -719,9 +577,7 @@ async function subHtml(request) {
 							</div>
 						</div>
 						<input type="text" id="result" readonly onclick="copyToClipboard()">
-						<label id="qrcode" style="margin: 15px 10px -15px 10px;"></label>
 					</div>
-					<div class="beian-info" style="text-align: center; font-size: 13px;">${网络备案}</div>
 				</div>
 	
 				<script>
@@ -807,19 +663,6 @@ async function subHtml(request) {
 								subLink = \`https://\${domain}/sub?\${uuidType}=\${uuid}&\${search}\`;
 							}
 							document.getElementById('result').value = subLink;
-	
-							// 更新二维码
-							const qrcodeDiv = document.getElementById('qrcode');
-							qrcodeDiv.innerHTML = '';
-							new QRCode(qrcodeDiv, {
-								text: subLink,
-								width: 220, // 调整宽度
-								height: 220, // 调整高度
-								colorDark: "#4a60ea", // 二维码颜色
-								colorLight: "#ffffff", // 背景颜色
-								correctLevel: QRCode.CorrectLevel.L, // 设置纠错级别
-								scale: 1 // 调整像素颗粒度
-							});
 						} catch (error) {
 							alert('链接格式错误，请检查输入');
 						}
@@ -844,13 +687,6 @@ export default {
 		if (env.CMPROXYIPS) 匹配PROXYIP = await 整理(env.CMPROXYIPS);;
 		if (env.CFPORTS) httpsPorts = await 整理(env.CFPORTS);
 		EndPS = env.PS || EndPS;
-		网站图标 = env.ICO ? `<link rel="icon" sizes="32x32" href="${env.ICO}">` : '';
-		网站头像 = env.PNG ? `<div class="logo-wrapper"><div class="logo-border"></div><img src="${env.PNG}" alt="Logo"></div>` : '';
-		if (env.IMG) {
-			const imgs = await 整理(env.IMG);
-			网站背景 = `background-image: url('${imgs[Math.floor(Math.random() * imgs.length)]}');`;
-		} else 网站背景 = '';
-		网络备案 = env.BEIAN || env.BY || 网络备案;
 		const userAgentHeader = request.headers.get('User-Agent');
 		const userAgent = userAgentHeader ? userAgentHeader.toLowerCase() : "null";
 		const url = new URL(request.url);
