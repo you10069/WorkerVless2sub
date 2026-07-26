@@ -504,7 +504,7 @@ async function subHtml(request) {
 					<div class="input-group">
 						<label for="result">优选订阅</label>
 						<input type="text" id="result" readonly onclick="copyToClipboard()">
-						<p class="notice"><strong>安全提示</strong>：使用优选订阅生成器时，需要提交节点配置信息用于生成订阅链接。订阅器维护者可能获取该节点信息，请自行斟酌使用风险。本版本仅生成 VMess、VLESS 或 Trojan 原始协议链接。</p>
+						<p class="notice"><strong>安全提示</strong>：使用优选订阅生成器时，需要提交节点配置信息用于生成订阅链接。订阅器维护者可能获取该节点信息，请自行斟酌使用风险。当前仅生成 VMess、VLESS 或 Trojan 原始协议链接。</p>
 					</div>
 				</div>
 	
