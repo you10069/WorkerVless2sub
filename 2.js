@@ -483,47 +483,11 @@ async function subHtml(request) {
 						}
 					}
 
-					.info-icon {
-						display: inline-flex;
-						align-items: center;
-						justify-content: center;
-						width: 18px;
-						height: 18px;
-						border-radius: 50%;
-						background-color: var(--primary-color);
-						color: white;
-						font-size: 12px;
-						margin-left: 8px;
-						cursor: pointer;
-						font-weight: bold;
-						position: relative;
-						top: -3px;
-					}
-
-					.info-tooltip {
-						display: none;
-						position: fixed;
-						background: white;
-						border: 1px solid var(--primary-color);
-						border-radius: 8px;
-						padding: 15px;
-						z-index: 1000;
-						min-width: 200px;
-						max-width: 90vw;
-						width: max-content;
-						left: 50%;
-						top: 50%;
-						transform: translate(-50%, -50%);
-						margin: 0;
-						line-height: 1.6;
+					.notice {
+						margin-top: 10px;
+						color: #555;
 						font-size: 13px;
-						white-space: normal;
-						word-wrap: break-word;
-						overflow-wrap: break-word;
-					}
-
-					.info-tooltip::before {
-						display: none;
+						line-height: 1.6;
 					}
 				</style>
 			</head>
@@ -538,38 +502,13 @@ async function subHtml(request) {
 					<button onclick="generateLink()">生成优选订阅</button>
 					
 					<div class="input-group">
-						<div style="display: flex; align-items: center;">
-							<label for="result">优选订阅</label>
-							<div style="position: relative;">
-								<span class="info-icon" onclick="toggleTooltip(event)">!</span>
-								<div class="info-tooltip" id="infoTooltip">
-									<strong>安全提示</strong>：使用优选订阅生成器时，需要您提交 <strong>节点配置信息</strong> 用于生成优选订阅链接。这意味着订阅器的维护者可能会获取到该节点信息。<strong>请自行斟酌使用风险。</strong><br>
-									<br>
-									本版本仅生成 VMess、VLESS 或 Trojan 原始协议链接，不调用订阅转换后端，也不生成 Clash、sing-box 或 Surge 配置。
-								</div>
-							</div>
-						</div>
+						<label for="result">优选订阅</label>
 						<input type="text" id="result" readonly onclick="copyToClipboard()">
+						<p class="notice"><strong>安全提示</strong>：使用优选订阅生成器时，需要提交节点配置信息用于生成订阅链接。订阅器维护者可能获取该节点信息，请自行斟酌使用风险。本版本仅生成 VMess、VLESS 或 Trojan 原始协议链接。</p>
 					</div>
 				</div>
 	
 				<script>
-					function toggleTooltip(event) {
-						event.stopPropagation(); // 阻止事件冒泡
-						const tooltip = document.getElementById('infoTooltip');
-						tooltip.style.display = tooltip.style.display === 'block' ? 'none' : 'block';
-					}
-					
-					// 点击页面其他区域关闭提示框
-					document.addEventListener('click', function(event) {
-						const tooltip = document.getElementById('infoTooltip');
-						const infoIcon = document.querySelector('.info-icon');
-						
-						if (!tooltip.contains(event.target) && !infoIcon.contains(event.target)) {
-							tooltip.style.display = 'none';
-						}
-					});
-
 					async function copyToClipboard() {
 						const value = document.getElementById('result').value;
 						if (!value) return;
