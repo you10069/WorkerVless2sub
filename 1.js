@@ -10,9 +10,6 @@ let addressescsv = [];
 let DLS = 7;
 let remarkIndex = 1;//CSV备注所在列偏移量
 
-let subConverter = 'SUBAPI.cmliussss.net';
-let subConfig = atob('aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL2NtbGl1L0FDTDRTU1IvbWFpbi9DbGFzaC9jb25maWcvQUNMNFNTUl9PbmxpbmVfRnVsbF9NdWx0aU1vZGUuaW5p');
-let subProtocol = 'https';
 let noTLS = 'false';
 let link;
 let 隧道版本作者 = atob('ZWQ=');
@@ -32,8 +29,6 @@ let SUBUpdateTime = 6;
 let total = 24;
 let timestamp = 4102329600000;
 const regex = /^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|\[.*\]):?(\d+)?#?(.*)?$/;
-let fakeUserID;
-let fakeHostName;
 let httpsPorts = ["2053", "2083", "2087", "2096", "8443"];
 let 有效时间 = 7;
 let 更新时间 = 3;
@@ -250,30 +245,6 @@ async function nginx() {
 	return text;
 }
 
-function surge(content, url, path) {
-	let 每行内容;
-	if (content.includes('\r\n')) {
-		每行内容 = content.split('\r\n');
-	} else {
-		每行内容 = content.split('\n');
-	}
-
-	let 输出内容 = "";
-	for (let x of 每行内容) {
-		if (x.includes(atob(atob('UFNCMGNtOXFZVzRz')))) {
-			const host = x.split("sni=")[1].split(",")[0];
-			const 备改内容 = `skip-cert-verify=true, tfo=false, udp-relay=false`;
-			const 正确内容 = `skip-cert-verify=true, ws=true, ws-path=${path}, ws-headers=Host:"${host}", tfo=false, udp-relay=false`;
-			输出内容 += x.replace(new RegExp(备改内容, 'g'), 正确内容).replace("[", "").replace("]", "") + '\n';
-		} else {
-			输出内容 += x + '\n';
-		}
-	}
-
-	输出内容 = `#!MANAGED-CONFIG ${url.href} interval=86400 strict=false` + 输出内容.substring(输出内容.indexOf('\n'));
-	return 输出内容;
-}
-
 function getRandomProxyByMatch(CC, socks5Data) {
 	// 将匹配字符串转换为小写
 	const lowerCaseMatch = CC.toLowerCase();
@@ -294,30 +265,6 @@ function getRandomProxyByMatch(CC, socks5Data) {
 	// 从匹配的代理中随机选择一个并返回
 	const randomProxy = filteredProxies[Math.floor(Math.random() * filteredProxies.length)];
 	return randomProxy;
-}
-
-async function MD5MD5(text) {
-	const encoder = new TextEncoder();
-
-	const firstPass = await crypto.subtle.digest('MD5', encoder.encode(text));
-	const firstPassArray = Array.from(new Uint8Array(firstPass));
-	const firstHex = firstPassArray.map(b => b.toString(16).padStart(2, '0')).join('');
-
-	const secondPass = await crypto.subtle.digest('MD5', encoder.encode(firstHex.slice(7, 27)));
-	const secondPassArray = Array.from(new Uint8Array(secondPass));
-	const secondHex = secondPassArray.map(b => b.toString(16).padStart(2, '0')).join('');
-
-	return secondHex.toLowerCase();
-}
-
-function revertFakeInfo(content, userID, hostName) {
-	content = content.replace(new RegExp(fakeUserID, 'g'), userID).replace(new RegExp(fakeHostName, 'g'), hostName);
-	return content;
-}
-
-function generateFakeInfo(content, userID, hostName) {
-	content = content.replace(new RegExp(userID, 'g'), fakeUserID).replace(new RegExp(hostName, 'g'), fakeHostName);
-	return content;
 }
 
 function isValidIPv4(address) {
@@ -767,8 +714,7 @@ async function subHtml(request) {
 								<div class="info-tooltip" id="infoTooltip">
 									<strong>安全提示</strong>：使用优选订阅生成器时，需要您提交 <strong>节点配置信息</strong> 用于生成优选订阅链接。这意味着订阅器的维护者可能会获取到该节点信息。<strong>请自行斟酌使用风险。</strong><br>
 									<br>
-									订阅转换后端：<strong><a href='${subProtocol}://${subConverter}/version' target="_blank" rel="noopener noreferrer">${subProtocol}://${subConverter}</a></strong><br>
-									订阅转换配置文件：<strong><a href='${subConfig}' target="_blank" rel="noopener noreferrer">${subConfig}</a></strong>
+									本版本仅生成 VMess、VLESS 或 Trojan 原始协议链接，不调用订阅转换后端，也不生成 Clash、sing-box 或 Surge 配置。
 								</div>
 							</div>
 						</div>
@@ -893,14 +839,6 @@ async function subHtml(request) {
 export default {
 	async fetch(request, env) {
 		if (env.TOKEN) 快速订阅访问入口 = await 整理(env.TOKEN);
-		subConverter = env.SUBAPI || subConverter;
-		if (subConverter.includes("http://")) {
-			subConverter = subConverter.split("//")[1];
-			subProtocol = 'http';
-		} else {
-			subConverter = subConverter.split("//")[1] || subConverter;
-		}
-		subConfig = env.SUBCONFIG || subConfig;
 		FileName = env.SUBNAME || FileName;
 		socks5DataURL = env.SOCKS5DATA || socks5DataURL;
 		if (env.CMPROXYIPS) 匹配PROXYIP = await 整理(env.CMPROXYIPS);;
@@ -916,7 +854,6 @@ export default {
 		const userAgentHeader = request.headers.get('User-Agent');
 		const userAgent = userAgentHeader ? userAgentHeader.toLowerCase() : "null";
 		const url = new URL(request.url);
-		const format = url.searchParams.get('format') ? url.searchParams.get('format').toLowerCase() : "null";
 		let host = "";
 		let uuid = "";
 		let path = "";
@@ -926,11 +863,6 @@ export default {
 		alpn = env.ALPN || alpn;
 		let UD = Math.floor(((timestamp - Date.now()) / timestamp * 99 * 1099511627776) / 2);
 		if (env.UA) MamaJustKilledAMan = MamaJustKilledAMan.concat(await 整理(env.UA));
-
-		const currentDate = new Date();
-		const fakeUserIDMD5 = await MD5MD5(Math.ceil(currentDate.getTime()));
-		fakeUserID = fakeUserIDMD5.slice(0, 8) + "-" + fakeUserIDMD5.slice(8, 12) + "-" + fakeUserIDMD5.slice(12, 16) + "-" + fakeUserIDMD5.slice(16, 20) + "-" + fakeUserIDMD5.slice(20);
-		fakeHostName = fakeUserIDMD5.slice(6, 9) + "." + fakeUserIDMD5.slice(13, 19) + ".xyz";
 
 		total = total * 1099511627776;
 		let expire = Math.floor(timestamp / 1000);
@@ -1108,10 +1040,7 @@ export default {
 
 		if (host.toLowerCase().includes('notls') || host.toLowerCase().includes('worker') || host.toLowerCase().includes('trycloudflare')) noTLS = 'true';
 		noTLS = env.NOTLS || noTLS;
-		let subConverterUrl = generateFakeInfo(url.href, uuid, host);
-		const isSubConverterRequest = request.headers.get('subconverter-request') || request.headers.get('subconverter-version') || userAgent.includes('subconverter');
-		if (isSubConverterRequest) alpn = '';
-		if (!isSubConverterRequest && MamaJustKilledAMan.some(PutAGunAgainstHisHeadPulledMyTriggerNowHesDead => userAgent.includes(PutAGunAgainstHisHeadPulledMyTriggerNowHesDead)) && MamaJustKilledAMan.length > 0) {
+			if (MamaJustKilledAMan.some(PutAGunAgainstHisHeadPulledMyTriggerNowHesDead => userAgent.includes(PutAGunAgainstHisHeadPulledMyTriggerNowHesDead)) && MamaJustKilledAMan.length > 0) {
 			const envKey = env.URL302 ? 'URL302' : (env.URL ? 'URL' : null);
 			if (envKey) {
 				const URLs = await 整理(env[envKey]);
@@ -1126,17 +1055,6 @@ export default {
 				return envKey === 'URL302' ? Response.redirect(URL, 302) : fetch(new Request(URL, request));
 			}
 			return await subHtml(request);
-		} else if ((userAgent.includes('clash') || userAgent.includes('meta') || userAgent.includes('mihomo') || (format === 'clash' && !isSubConverterRequest)) && !userAgent.includes('nekobox') && !userAgent.includes('cf-workers-sub')) {
-			subConverterUrl = `${subProtocol}://${subConverter}/sub?target=clash&url=${encodeURIComponent(subConverterUrl)}&insert=false&config=${encodeURIComponent(subConfig)}&emoji=true&list=false&tfo=false&scv=${scv}&fdn=false&sort=false&new_name=true`;
-		} else if ((userAgent.includes('sing-box') || userAgent.includes('singbox') || (format === 'singbox' && !isSubConverterRequest)) && !userAgent.includes('cf-workers-sub')) {
-			if (协议类型 == 'VMess' && url.href.includes('path=')) {
-				const 路径参数前部分 = url.href.split('path=')[0];
-				const parts = url.href.split('path=')[1].split('&');
-				const 路径参数后部分 = parts.slice(1).join('&') || '';
-				const 待处理路径参数 = url.href.split('path=')[1].split('&')[0] || '';
-				if (待处理路径参数.includes('%3F')) subConverterUrl = generateFakeInfo(路径参数前部分 + 'path=' + 待处理路径参数.split('%3F')[0] + '&' + 路径参数后部分, uuid, host);
-			}
-			subConverterUrl = `${subProtocol}://${subConverter}/sub?target=singbox&url=${encodeURIComponent(subConverterUrl)}&insert=false&config=${encodeURIComponent(subConfig)}&emoji=true&list=false&tfo=false&scv=${scv}&fdn=false&sort=false&new_name=true`;
 		} else {
 			if (host.includes('workers.dev')) {
 				if (临时中转域名接口) {
@@ -1373,14 +1291,9 @@ export default {
 				console.log("notlsresponseBody: " + notlsresponseBody);
 			}
 
-			if (协议类型 == atob('VHJvamFu') && (userAgent.includes('surge') || (format === 'surge' && !isSubConverterRequest)) && !userAgent.includes('cf-workers-sub')) {
-				const 特洛伊Links = combinedContent.split('\n');
-				const 特洛伊LinksJ8 = generateFakeInfo(特洛伊Links.join('|'), uuid, host);
-				subConverterUrl = `${subProtocol}://${subConverter}/sub?target=surge&ver=4&url=${encodeURIComponent(特洛伊LinksJ8)}&insert=false&config=${encodeURIComponent(subConfig)}&emoji=true&list=false&xudp=false&udp=false&tfo=false&expand=true&scv=${scv}&fdn=false`;
-			} else {
 				let base64Response;
 				try {
-					base64Response = btoa(combinedContent); // 重新进行 Base64 编码
+					base64Response = btoa(combinedContent); // Base64 内容解码后仅包含原始协议 URL
 				} catch (e) {
 					function encodeBase64(data) {
 						const binary = new TextEncoder().encode(data);
@@ -1403,31 +1316,7 @@ export default {
 					}
 					base64Response = encodeBase64(combinedContent);
 				}
-				const response = new Response(base64Response, { headers: responseHeaders });
-				return response;
-			}
-		}
-
-		try {
-			const subConverterResponse = await fetch(subConverterUrl, { headers: { 'User-Agent': `v2rayN/${FileName + atob('IChodHRwczovL2dpdGh1Yi5jb20vY21saXUvRWRnZU9uZS1QYWdlcy1CZXN0SVAyU1VCKQ==')}` } });
-
-			if (!subConverterResponse.ok) {
-				throw new Error(`Error fetching subConverterUrl: ${subConverterResponse.status} ${subConverterResponse.statusText}`);
-			}
-
-			let subConverterContent = await subConverterResponse.text();
-
-			if (协议类型 == atob('VHJvamFu') && (userAgent.includes('surge') || (format === 'surge' && !isSubConverterRequest)) && !userAgent.includes('cf-workers-sub')) {
-				subConverterContent = surge(subConverterContent, host, path);
-			}
-			subConverterContent = revertFakeInfo(subConverterContent, uuid, host);
-			if (!userAgent.includes('mozilla')) responseHeaders["Content-Disposition"] = `attachment; filename*=utf-8''${encodeURIComponent(FileName)}`;
-			return new Response(subConverterContent, { headers: responseHeaders });
-		} catch (error) {
-			return new Response(`Error: ${error.message}`, {
-				status: 500,
-				headers: { 'content-type': 'text/plain; charset=utf-8' },
-			});
+				return new Response(base64Response, { headers: responseHeaders });
 		}
 	}
 };
