@@ -393,7 +393,6 @@ async function subHtml(request) {
 				<style>
 					:root {
 						--primary-color: #4361ee;
-						--hover-color: #3b4fd3;
 						--bg-color: #f5f6fa;
 						--card-bg: #ffffff;
 					}
@@ -418,21 +417,10 @@ async function subHtml(request) {
 					.container {
 						position: relative;
 						background: rgba(255, 255, 255, 0.7);
-						backdrop-filter: blur(10px);
-						-webkit-backdrop-filter: blur(10px); 
 						max-width: 600px;
 						width: 90%;
 						padding: 2rem;
 						border-radius: 20px;
-						box-shadow: 0 10px 20px rgba(0,0,0,0.05),
-									inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-						transition: transform 0.3s ease;
-					}
-
-					.container:hover {
-						transform: translateY(-5px);
-						box-shadow: 0 15px 30px rgba(0,0,0,0.1),
-									inset 0 0 0 1px rgba(255, 255, 255, 0.2);
 					}
 					
 					h1 {
@@ -459,15 +447,11 @@ async function subHtml(request) {
 						border: 2px solid rgba(0, 0, 0, 0.15);
 						border-radius: 10px;
 						font-size: 1rem;
-						transition: all 0.3s ease;
-						box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.03);
 					}
 
 					input:focus {
 						outline: none;
 						border-color: var(--primary-color);
-						box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15),
-									inset 0 2px 4px rgba(0, 0, 0, 0.03);
 					}
 					
 					button {
@@ -480,17 +464,7 @@ async function subHtml(request) {
 						font-size: 1rem;
 						font-weight: 600;
 						cursor: pointer;
-						transition: all 0.3s ease;
 						margin-bottom: 1.5rem;
-					}
-					
-					button:hover {
-						background-color: var(--hover-color);
-						transform: translateY(-2px);
-					}
-					
-					button:active {
-						transform: translateY(0);
 					}
 					
 					#result {
@@ -534,7 +508,6 @@ async function subHtml(request) {
 						border-radius: 8px;
 						padding: 15px;
 						z-index: 1000;
-						box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 						min-width: 200px;
 						max-width: 90vw;
 						width: max-content;
@@ -597,34 +570,15 @@ async function subHtml(request) {
 						}
 					});
 
-					function copyToClipboard() {
-						const resultInput = document.getElementById('result');
-						if (!resultInput.value) {
-							return;
-						}
-						
-						resultInput.select();
-						navigator.clipboard.writeText(resultInput.value).then(() => {
-							const tooltip = document.createElement('div');
-							tooltip.style.position = 'fixed';
-							tooltip.style.left = '50%';
-							tooltip.style.top = '20px';
-							tooltip.style.transform = 'translateX(-50%)';
-							tooltip.style.padding = '8px 16px';
-							tooltip.style.background = '#4361ee';
-							tooltip.style.color = 'white';
-							tooltip.style.borderRadius = '4px';
-							tooltip.style.zIndex = '1000';
-							tooltip.textContent = '已复制到剪贴板';
-							
-							document.body.appendChild(tooltip);
-							
-							setTimeout(() => {
-								document.body.removeChild(tooltip);
-							}, 2000);
-						}).catch(err => {
+					async function copyToClipboard() {
+						const value = document.getElementById('result').value;
+						if (!value) return;
+
+						try {
+							await navigator.clipboard.writeText(value);
+						} catch {
 							alert('复制失败，请手动复制');
-						});
+						}
 					}
 	
 					function generateLink() {
