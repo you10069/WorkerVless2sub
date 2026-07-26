@@ -22,8 +22,7 @@ let proxyIPs = [
 ];
 let 匹配PROXYIP = [];
 let socks5DataURL = '';
-let BotToken = '';
-let ChatID = '';
+
 let 临时中转域名 = [];
 let 临时中转域名接口 = '';
 let EndPS = '';
@@ -233,7 +232,7 @@ async function sendMessage(type, ip, add_data = "") {
 			msg = `${type}\nIP: ${ip}\n<tg-spoiler>${add_data}`;
 		}
 
-		const url = `https://api.telegram.org/bot${BotToken}/sendMessage?chat_id=${ChatID}&parse_mode=HTML&text=${encodeURIComponent(msg)}`;
+		const url = `/bot${BotToken}/sendMessage?chat_id=${ChatID}&parse_mode=HTML&text=${encodeURIComponent(msg)}`;
 		return fetch(url, {
 			method: 'GET',
 			headers: {
@@ -921,8 +920,6 @@ async function subHtml(request) {
 export default {
 	async fetch(request, env) {
 		if (env.TOKEN) 快速订阅访问入口 = await 整理(env.TOKEN);
-		BotToken = env.TGTOKEN || BotToken;
-		ChatID = env.TGID || ChatID;
 		subConverter = env.SUBAPI || subConverter;
 		if (subConverter.includes("http://")) {
 			subConverter = subConverter.split("//")[1];
@@ -1056,8 +1053,6 @@ export default {
 				else if (uuid == "null") 空字段 = "UUID";
 				EndPS += ` 订阅器内置节点 ${空字段} 未设置！！！`;
 			}
-
-			await sendMessage(`#获取订阅 ${FileName}`, request.headers.get('CF-Connecting-IP'), `UA: ${userAgentHeader}</tg-spoiler>\n域名: ${url.hostname}\n<tg-spoiler>入口: ${url.pathname + url.search}</tg-spoiler>`);
 		} else {
 			host = url.searchParams.get('host');
 			uuid = url.searchParams.get('uuid') || url.searchParams.get('password') || url.searchParams.get('pw');
